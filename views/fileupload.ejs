@@ -1,0 +1,14 @@
+    <% include header %>
+    <div class = "ui center aligned container">
+    <h1 style = "font-size: 5em; margin-top: 0.5em; margin-bottom: 2.5em" class = "ui massive header"> Upload file </h1>
+    <form ref='uploadForm' 
+    id='uploadForm' 
+    action="/upload" 
+    method='post' 
+    encType="multipart/form-data">
+      <input type="file" name="sampleFile" />
+      <input class = "ui blue button" type='submit' value='Upload!' />
+    </form>  
+    </div>
+
+    <% include footer %>

@@ -1,0 +1,98 @@
+<% include header %>
+<div class = "ui center aligned container">
+
+<h1 style = "font-size: 6em;" class = "ui massive blue header"> Text Generator </h1>
+
+<textarea style="margin: 5em auto;" rows = 20 cols = 100 id = "textarea" ></textarea>
+
+<div class = "ui center aligned container">
+<button id = "generateButton" class = "ui center aligned blue large button"> Generate Text </button>
+</div>
+</div>
+
+
+<script>
+
+	function updateDisplay(){
+		$("#textarea").val(window.text);
+	}
+
+
+
+	function insertInitial(){
+	window.current = window.beginnings[Math.floor(Math.random()*beginnings.length)];
+	window.text = ""
+	for(var i = 0; i < 5; i++){
+		window.text += " " + window.current;
+	
+		window.lastWord = window.current.split(" ").pop();
+
+		if (window.lastWord in window.ngrams){
+			window.currentArr = ngrams[lastWord];
+			window.current = window.currentArr[Math.floor(Math.random()*currentArr.length)];
+		} else {
+			if(window.text[window.text.length -1] != "."){
+				window.text += ".";
+			}
+			
+			window.current = window.beginnings[Math.floor(Math.random()*beginnings.length)];
+		}
+
+		
+	}
+	$("#generateButton").off();
+	$("#generateButton").on("click", insertText);
+	updateDisplay();
+	}
+
+
+function getData(){
+	$.get("/data/<%=filename%>", function(data,status){
+                if (status === "success"){
+                    window.ngrams = data.ngrams;
+                    window.beginnings = data.beginnings;
+                }
+                
+            })
+
+         //   insertInitial();
+
+	}
+
+	function insertText(){
+	console.log("Inserting text");
+	for(var i = 0; i < 5; i ++){
+		window.text += " " + window.current;
+	
+		window.lastWord = window.current.split(" ").pop();
+
+		if (window.lastWord in window.ngrams){
+			window.currentArr = ngrams[lastWord];
+			window.current = window.currentArr[Math.floor(Math.random()*currentArr.length)];
+		} else {
+			console.log("INSERTING BEGINNING");
+			if(window.text[window.text.length -1] != "."){
+				window.text += ".";
+			}
+			
+			window.current = window.beginnings[Math.floor(Math.random()*beginnings.length)];
+		}
+
+		
+	}
+		updateDisplay();
+	}
+
+	
+
+$(document).ready(function(){
+	window.beginnings = {};
+	getData();
+	
+	$("#generateButton").on("click", insertInitial);
+
+})
+
+</script>
+
+<% include footer %>
